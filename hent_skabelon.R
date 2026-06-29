@@ -1,10 +1,16 @@
 URL  <- "https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/main/ku_skabelon.tex"
 DEST <- "ku_skabelon.tex"
 
-tryCatch(
-  download.file(URL, DEST, quiet = TRUE),
-  error = function(e) {
-    if (!file.exists(DEST))
-      stop("Kan ikke hente skabelon og ingen lokal kopi: ", e$message)
-  }
-)
+if (file.exists(DEST)) {
+  message("Bruger lokal kopi af ku_skabelon.tex")
+} else {
+  tryCatch(
+    {
+      download.file(URL, DEST, quiet = TRUE)
+      message("ku_skabelon.tex hentet fra GitHub")
+    },
+    error = function(e) {
+      stop("Ingen lokal kopi - og kan ikke hente fra GitHub: ", e$message)
+    }
+  )
+}
