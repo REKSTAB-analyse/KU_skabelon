@@ -1,7 +1,7 @@
 import os
 import urllib.request
 
-URL = "https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/main/ku_skabelon.tex"
+URL = f"{base_url}/ku_skabelon.tex"
 DEST = "ku_skabelon.tex"
 
 if os.path.exists(DEST):
