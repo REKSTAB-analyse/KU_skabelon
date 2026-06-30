@@ -1,4 +1,4 @@
-URL  <- "https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/main/ku_skabelon.tex"
+URL  <- paste0(base_url, "/ku_skabelon.tex")
 DEST <- "ku_skabelon.tex"
 
 if (file.exists(DEST)) {
