@@ -29,11 +29,8 @@
 \usepackage{booktabs}
 \usepackage{footnote}
 \usepackage{longtable} % Nødvendig for at kunne inkludere tabeller 
-\usepackage{etoolbox}
 \makeatletter
-\patchcmd{\LT@array}
-  {\ifnum\col@number=\@ne\else\LT@err{longtable not in 1-column mode}\@ehc\fi}
-  {}{}{}
+\def\LT@err#1#2{}
 \makeatother
 \usepackage{caption}
 \providecommand{\tightlist}{%
