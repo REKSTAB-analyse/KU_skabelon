@@ -29,6 +29,13 @@
 \usepackage{booktabs}
 \usepackage{footnote}
 \usepackage{longtable} % Nødvendig for at kunne inkludere tabeller 
+\makeatletter
+\renewenvironment{longtable}[2][]{%
+  \begin{tabular}{#2}%
+}{%
+  \end{tabular}%
+}
+\makeatother
 \usepackage{caption}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}%
