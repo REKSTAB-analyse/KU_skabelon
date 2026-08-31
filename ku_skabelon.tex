@@ -89,10 +89,11 @@ $header-includes$
 \vspace*{1.05cm}
 
 \begin{paracol}{2}
+    \begingroup
     % Her ændres brødteksten (teksten i venstre kolonne)
     \textls[300]{\vspace*{-0.7cm}\\    
     \fontsize{10}{11}\selectfont \fontspec{Arial} \textbf{SAGSNOTAT}} \\    
-    
+
     \vspace{0.7 cm}
     \begin{tabular}{@{}p{3cm} p{10cm}@{}}
     \textbf{Vedr.} & \Titel \\
@@ -101,7 +102,8 @@ $header-includes$
     \vspace{0.5 cm}
     \RaggedRight
     $body$
-    
+    \par
+    \endgroup
     \switchcolumn
     \begin{tcolorbox}[blanker, breakable, width=\linewidth+2cm]
     {\fontsize{7}{14}\selectfont
