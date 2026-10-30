@@ -52,8 +52,8 @@ Sæt `SKABELON = "ku_skabelon.tex"` i hentechunket (se nedenfor).
 title: "Rapportens titel"   # OBS: title, ikke titel
 undertitel: "Undertitel"    # valgfri
 dato: "Oktober 2026"        # valgfri, ellers dagens dato
-afsender: "..."             # valgfri, standard: Rektoratets Stab · REKSTAB Analyse
-forsidebillede: "fig.png"   # valgfri
+afsender: ""                # valgfri, standard kan ændres i skabelonen
+forsidebillede: ""          # valgfri .png
 format: 
     pdf:
         template: "ku_rapportskabelon.tex"
