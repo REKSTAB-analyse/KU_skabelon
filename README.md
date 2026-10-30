@@ -25,7 +25,7 @@ Opret en tom '.qmd'-fil i en mappe. Skabelonen og logoet hentes automatisk fra G
 ---
 titel: "Titel på notatet"
 sagsbehandler: "Fornavn Efternavn"
-email: "xxx@adm.ku.dk"
+email: "xxx@xxx.ku.dk"
 koncern: "Rektoratets Stab"
 enhed: "REKSTAB Analyse"
 telefon: 12 34 56 78        # valgfri
@@ -37,3 +37,25 @@ format:
     latex_engine: lualatex
 ---
 ```
+Sæt `SKABELON = "ku_skabelon.tex"` i hentechunket (se nedenfor).
+
+
+### Rapport
+```yaml
+---
+title: "Rapportens titel"   # OBS: title, ikke titel
+undertitel: "Undertitel"    # valgfri
+dato: "Oktober 2026"        # valgfri, ellers dagens dato
+afsender: "..."             # valgfri, standard: Rektoratets Stab · REKSTAB Analyse
+forsidebillede: "fig.png"   # valgfri
+format:
+  pdf:
+    template: "ku_rapportskabelon.tex"
+    latex_engine: lualatex
+    toc: true               # indholdsfortegnelse (side 2)
+---
+```
+
+Sæt `SKABELON = "ku_rapportskabelon.tex"` i hentechunket (se nedenfor).
+
+- '#', `#`
