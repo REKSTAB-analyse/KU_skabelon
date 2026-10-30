@@ -20,3 +20,20 @@ LateX-skabeloner til Quarto, der matcher KU's Word-formater. De bruges i REKSTAB
 Opret en tom '.qmd'-fil i en mappe. Skabelonen og logoet hentes automatisk fra GitHub, første gang dokumentet renderes. 
 
 ### Sagsnotat
+
+```yaml
+---
+titel: "Titel på notatet"
+sagsbehandler: "Fornavn Efternavn"
+email: "xxx@adm.ku.dk"
+koncern: "Rektoratets Stab"
+enhed: "REKSTAB Analyse"
+telefon: 12 34 56 78        # valgfri
+modtager: "Modtager"        # valgfri
+dokumenttype: "SAGSNOTAT"   # valgfri
+format:
+  pdf:
+    template: "ku_skabelon.tex"
+    latex_engine: lualatex
+---
+```
