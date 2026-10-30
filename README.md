@@ -79,6 +79,7 @@ Sæt `SKABELON = "ku_rapportskabelon.tex"` i hentechunket (se nedenfor).
 Øverst i '.qmd'-filen lige efter YAML. Vælg den version, der passer til dit kodesprog. `SKABELON` er `"ku_skabelon.tex"` (sagsnotat) eller `"ku_rapportskabelon.tex"` (rapport). 
 
 ### R
+````
 ```{r}
 #| label: hent skabelon
 #| include: false
@@ -91,6 +92,7 @@ base_url <- paste0(
 )
 source(paste0(base_url, "/hent_skabelon.R"))
 ```
+````
 
 ### Python 
 ````
