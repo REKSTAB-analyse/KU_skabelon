@@ -13,7 +13,7 @@ LateX-skabeloner til Quarto, der matcher KU's Word-formater. De bruges i REKSTAB
 
 - Quarto med LuaLaTeX (f.eks. via TinyTex)
 - Skrifttyperne Times New Roman og Arial skal være installerede
-- Python (eller R) til hentescriptet
+- Enten R eller Python til at hente skabelonen - man behøver kun den ene. 
 
 ## Kom i gang
 
@@ -76,21 +76,43 @@ Sæt `SKABELON = "ku_rapportskabelon.tex"` i hentechunket (se nedenfor).
 
 ## Hentechunket
 
-Øverst i '.qmd'-filen lige efter YAML: 
+Øverst i '.qmd'-filen lige efter YAML. Vælg den version, der passer til dit kodesprog. `SKABELON` er `"ku_skabelon.tex"` (sagsnotat) eller `"ku_rapportskabelon.tex"` (rapport). 
 
-```
+### R
+```{r}
+#| label: hent skabelon
 #| include: false
+#| echo: false
+
+SKABELON <- "ku_rapportskabelon.tex"
+BRANCH   <- "main"  # <- skift kun denne linje, f.eks. til "dev", hvis I tester
+base_url <- paste0(
+  "https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/", BRANCH
+)
+source(paste0(base_url, "/hent_skabelon.R"))
+```
+
+### Python 
+````
+```{python}
+#| label: hent skabelon
+#| include: false
+#| echo: false
+
 import urllib.request
 
-SKABELON = "ku_skabelon.tex"   # eller "ku_rapportskabelon.tex"
-BRANCH = "main"                # "dev" hvis I tester
+SKABELON = "ku_rapportskabelon.tex"
+BRANCH = "main"  # <- skift kun denne linje, f.eks. til "dev", hvis I tester
 base_url = f"https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/{BRANCH}"
 exec(urllib.request.urlopen(f"{base_url}/hent_skabelon.py").read())
 ```
+````
 
-- Findes skabelonen og logoet allerede i mappen, bruges de lokale kopier.
-- Slet filerne for at hente den seneste version af skabelonen.
-- GitHub cacher filer i op til 5 minutter efter en ændring.
+### Sådan virker det
+
+- Findes skabelonen og logoet allerede i mappen med '.qmd'-filen, bruges de lokale versioner.
+- Slet filerne for at få den nyeste version hentet.
+- GitHub gemmer filer t op til fem minutter efter ændring. 
 
 ## Vedligeholdelse
 
