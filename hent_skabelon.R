@@ -1,16 +1,20 @@
-URL  <- paste0(base_url, "/ku_skabelon.tex")
-DEST <- "ku_skabelon.tex"
+mappe <- Sys.getenv("QUARTO_DOCUMENT_PATH", unset = getwd())
 
-if (file.exists(DEST)) {
-  message("Bruger lokal kopi af ku_skabelon.tex")
-} else {
-  tryCatch(
-    {
-      download.file(URL, DEST, quiet = TRUE)
-      message("ku_skabelon.tex hentet fra GitHub")
-    },
-    error = function(e) {
-      stop("Ingen lokal kopi - og kan ikke hente fra GitHub: ", e$message)
-    }
-  )
+for (navn in c("ku_skabelon.tex", "KU_logo.png")) {
+  dest <- file.path(mappe, navn)
+  if (file.exists(dest)) {
+    message("Bruger lokal kopi af ", navn)
+  } else {
+    tryCatch(
+      {
+        download.file(paste0(base_url, "/", navn), dest,
+                      quiet = TRUE, mode = "wb")
+        message(navn, " hentet fra GitHub")
+      },
+      error = function(e) {
+        stop("Ingen lokal kopi af ", navn,
+             " - og kan ikke hente fra GitHub: ", e$message)
+      }
+    )
+  }
 }
