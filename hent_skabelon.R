@@ -1,6 +1,7 @@
 mappe <- Sys.getenv("QUARTO_DOCUMENT_PATH", unset = getwd())
+skabelon <- if (exists("SKABELON")) SKABELON else "ku_skabelon.tex"
 
-for (navn in c("ku_skabelon.tex", "KU_logo.png")) {
+for (navn in c(skabelon, "KU_logo.png")) {
   dest <- file.path(mappe, navn)
   if (file.exists(dest)) {
     message("Bruger lokal kopi af ", navn)
