@@ -7,7 +7,7 @@ skabelon_mappe = os.path.abspath(
     os.environ.get("QUARTO_DOCUMENT_PATH") or os.getcwd()
 )
 
-FILER = ["ku_skabelon.tex", "KU_logo.png"]
+FILER = [globals().get("SKABELON", "ku_skabelon.tex"), "KU_logo.png"]
 
 for navn in FILER:
     dest = os.path.join(skabelon_mappe, navn)
