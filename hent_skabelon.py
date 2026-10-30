@@ -1,20 +1,26 @@
 import os
 import urllib.request
 
-qmd_sti = os.environ.get("QUARTO_DOCUMENT_PATH")
-if qmd_sti:
-    skabelon_mappe = os.path.dirname(os.path.abspath(qmd_sti))
-else:
-    skabelon_mappe = os.getcwd()
+# QUARTO_DOCUMENT_PATH er selve mappen med .qmd-filen (ikke filstien)
+skabelon_mappe = os.path.abspath(
+    os.environ.get("QUARTO_DOCUMENT_PATH") or os.getcwd()
+)
 
-URL = f"{base_url}/ku_skabelon.tex"
-DEST = os.path.join(skabelon_mappe, "ku_skabelon.tex")
+FILER = ["ku_skabelon.tex", "KU_logo.png"]
 
-if os.path.exists(DEST):
-    print("Bruger lokal kopi af ku_skabelon.tex")
-else:
+for navn in FILER:
+    dest = os.path.join(skabelon_mappe, navn)
+    if os.path.exists(dest):
+        print(f"Bruger lokal kopi af {navn}")
+        continue
+    tmp = dest + ".download"
     try:
-        urllib.request.urlretrieve(URL, DEST)
-        print("ku_skabelon.tex hentet fra GitHub")
+        urllib.request.urlretrieve(f"{base_url}/{navn}", tmp)
+        os.replace(tmp, dest)
+        print(f"{navn} hentet fra GitHub")
     except Exception as e:
-        raise SystemExit(f"Ingen lokal kopi - og kan ikke hente fra GitHub: {e}")
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise SystemExit(
+            f"Ingen lokal kopi af {navn} - og kan ikke hente fra GitHub: {e}"
+        )
