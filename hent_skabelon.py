@@ -1,4 +1,5 @@
 import os
+import time
 import urllib.request
 
 # QUARTO_DOCUMENT_PATH er selve mappen med .qmd-filen (ikke filstien)
@@ -13,9 +14,12 @@ for navn in FILER:
     if os.path.exists(dest):
         print(f"Bruger lokal kopi af {navn}")
         continue
+    url = f"{base_url}/{navn}"
+    if url.startswith("http"):
+        url += f"?t={int(time.time())}"  # sikrer nyeste version (omgår cache)
     tmp = dest + ".download"
     try:
-        urllib.request.urlretrieve(f"{base_url}/{navn}", tmp)
+        urllib.request.urlretrieve(url, tmp)
         os.replace(tmp, dest)
         print(f"{navn} hentet fra GitHub")
     except Exception as e:
