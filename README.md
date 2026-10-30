@@ -58,4 +58,30 @@ format:
 
 Sæt `SKABELON = "ku_rapportskabelon.tex"` i hentechunket (se nedenfor).
 
-- '#', `#`
+- '#', '##' og '###' giver overskrift 1, 2 og 3. Alle kommer med i indholdet.
+- Overskrifterne er ikke nummererede, jf. Word-skabelonen. Nummerering skås til med `\setcounter{secnumdepth}{3}` i skabelonen.
+- '####' findes ikke i Word-skabelonen og har derfor ikke et særligt format.
+
+## Hentechunket
+
+Øverst i '.qmd'-filen lige efter YAML: 
+
+```
+#| include: false
+import urllib.request
+
+SKABELON = "ku_skabelon.tex"   # eller "ku_rapportskabelon.tex"
+BRANCH = "main"                # "dev" hvis I tester
+base_url = f"https://raw.githubusercontent.com/REKSTAB-analyse/KU_skabelon/{BRANCH}"
+exec(urllib.request.urlopen(f"{base_url}/hent_skabelon.py").read())
+```
+
+- Findes skabelonen og logoet allerede i mappen, bruges de lokale kopier.
+- Slet filerne for at hente den seneste version af skabelonen.
+- GitHub cacher filer i op til 5 minutter efter en ændring.
+
+## Vedligeholdelse
+
+1. Ret i branchen 'dev' og test med `BRANCH = "dev"` i hentechunket.
+2. Når rettelserne virker, merges 'dev' til 'main'.
+3. Brugerne henter fra 'main'.
