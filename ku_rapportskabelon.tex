@@ -1,0 +1,205 @@
+% I skabelonen er der tre primære ting at ændre: linjerne øverst, brødteksten og teksten i højre kolonne.
+
+% VIGTIGT! For at dokumentet kan compile, skal man benytte XeLaTeX eller LuaLaTeX som compiler. Dette kan gøres i Overleaf ved at gå til Menu -> Settings -> Compiler -> Vælg XeLaTeX/LuaLaTeX
+
+% Brugerspecifikke variable fra YAML-header
+\newcommand{\Titel}{$title$}   % Rapportoverskrift (1-2 linjer)
+\newcommand{\Undertitel}{$undertitel$}   % Rapportunderoverskrift (valgfri)
+\newcommand{\Dato}{$if(dato)$$dato$$else$\today$endif$}   % Tekst/dato på forsiden
+\newcommand{\Afsender}{$if(afsender)$$afsender$$else$Rektoratets Stab · Analyse$endif$}   % Afsenderlinje på forsiden
+\newcommand{\Indholdstitel}{$if(indholdstitel)$$indholdstitel$$else$Indhold$endif$}
+ 
+\documentclass[a4paper,12pt]{article}
+ 
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{setspace}
+\usepackage{fontspec}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    }
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{footnote}
+\usepackage{longtable} % Nødvendig for at kunne inkludere tabeller
+\makeatletter
+\def\LT@err#1#2{}
+\makeatother
+\usepackage{caption}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parskip}{0pt}%
+}
+\providecommand{\pandocbounded}[1]{#1}
+$header-includes$
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\setlist[itemize]{noitemsep, topsep=0pt, partopsep=0pt, parsep=1pt, left=0pt}
+\setcounter{secnumdepth}{0}   % Som i Word-skabelonen: ingen nummerering. Sæt til 3 for at nummerere
+\setcounter{tocdepth}{$if(toc-depth)$$toc-depth$$else$3$endif$}
+\setlist[itemize,2]{label=\textopenbullet}
+\setlist[enumerate,1]{leftmargin=36bp, labelindent=0pt, labelwidth=18bp,
+  labelsep=0pt, align=left, itemsep=6bp, topsep=0pt, partopsep=0pt,
+  parsep=0pt, first={\setlength{\rightskip}{3.5bp plus 1fil}}}
+ 
+\usepackage{polyglossia}
+\setdefaultlanguage{danish} % Dato på dansk
+\usepackage{ragged2e}
+ 
+\usepackage{amsmath}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\usepackage{fancyhdr}
+ 
+% Sidetal nederst til højre (ikke på forsiden)
+\fancypagestyle{rapport}{%
+  \fancyhf{}
+  \fancyfoot[R]{\thepage\hspace*{17.9bp}}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+\pagestyle{rapport}
+\setlength{\headheight}{14pt}
+ 
+\newgeometry{top=105.5bp, bottom=3.2cm, left=2cm, right=2cm,
+  headsep=0pt, footskip=25.1bp}
+\setlength{\headwidth}{\textwidth}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6bp}
+ 
+% Som Word: ingen orphans/widows og ingen automatisk orddeling
+\clubpenalty=10000
+\widowpenalty=10000
+ 
+% Brødtekst: Times New Roman 12 pt med 1,5 linjeafstand (Word: 20,7 pt)
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{12bp}{20.7bp}%
+  \abovedisplayskip 12\p@ \@plus3\p@ \@minus7\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
+  \belowdisplayskip \abovedisplayskip
+  \let\@listi\@listI}
+\makeatother
+\normalsize
+ 
+\definecolor{KUrod}{RGB}{144,26,30}
+\definecolor{KUgra}{RGB}{102,102,102}
+ 
+\setmainfont{Times New Roman}[Kerning=Off, Ligatures=NoCommon]
+\setsansfont{Arial}[Kerning=Off, Ligatures=NoCommon]
+ 
+% Overskrifter: Arial Bold 18 / 12 / 10 pt (afstande målt i Word-skabelonen)
+\newif\ifkuafterh
+\AddToHook{para/begin}{\global\kuafterhfalse}
+\titleformat{\section}{\sffamily\bfseries\fontsize{18bp}{20.7bp}\selectfont}{\thesection\quad}{0pt}{}[\global\kuafterhtrue]
+\titleformat{\subsection}{\sffamily\bfseries\fontsize{12bp}{13.8bp}\selectfont}{\thesubsection\quad}{0pt}{}
+\titleformat{\subsubsection}{\sffamily\bfseries\fontsize{10bp}{11.5bp}\selectfont}{\thesubsubsection\quad}{0pt}{}
+\titlespacing*{\section}{0pt}{17.9bp}{0.2bp}
+\titlespacing*{\subsection}{0pt}{19bp}{-3bp}
+\titlespacing*{\subsubsection}{0pt}{13.5bp}{-4.8bp}
+% Word lægger afstandene sammen, når H2 følger direkte efter H1 (titlesec tager maksimum)
+\let\kuoldsubsection\subsection
+\renewcommand\subsection{\ifkuafterh\kern 9.9bp\global\kuafterhfalse\fi\kuoldsubsection}
+ 
+% Indholdsfortegnelse: niveau 1 Arial Bold 12 versaler, niveau 2 TNR Bold 10, niveau 3 TNR 10
+\makeatletter
+\renewcommand*\numberline[1]{#1\hspace{0.8em}}
+\newcommand*\kutocline[6]{% #1 skrift, #2 indrykning, #3 prik-afstand, #4 versaler (eller \@firstofone), #5 tekst, #6 side
+  \par
+  {\parindent=0pt \parskip=0pt \leftskip=#2 \rightskip=3em \parfillskip=-\rightskip
+   \interlinepenalty\@M #1\leavevmode
+   #4{#5}\nobreak
+   \leaders\hbox to #3{\hss.}\hfill\nobreak
+   \hbox to 2em{\hss #6}\par}}
+\renewcommand*\l@section[2]{\kutocline
+  {\sffamily\bfseries\fontsize{12bp}{37.2bp}\selectfont}{0bp}{3.36bp}\MakeUppercase{#1}{#2}}
+\renewcommand*\l@subsection[2]{\kutocline
+  {\rmfamily\bfseries\fontsize{10bp}{23.9bp}\selectfont}{0bp}{2.52bp}\@firstofone{#1}{#2}}
+\renewcommand*\l@subsubsection[2]{\kutocline
+  {\rmfamily\mdseries\fontsize{10bp}{17.3bp}\selectfont}{12bp}{2.52bp}\@firstofone{#1}{#2}}
+\makeatother
+ 
+\begin{document}
+\thispagestyle{empty}
+ 
+% ---------------- Forside ----------------
+\begin{tikzpicture}[remember picture, overlay]
+  % Rød streg i fuld sidebredde
+  \draw[KUrod, line width=0.5bp]
+    ([yshift=-211.15bp]current page.north west) --
+    ([yshift=-211.15bp]current page.north east);
+  % Segl (udsnit af KU_logo.png) og de to røde prikker
+  \begin{scope}
+    \clip ([xshift=507.55bp,yshift=-127.5bp]current page.north west)
+      circle (33.5bp);
+    \node[anchor=center, inner sep=0pt]
+      at ([xshift=504.3bp,yshift=-156.6bp]current page.north west)
+      {\includegraphics[width=133.4bp]{KU_logo.png}};
+  \end{scope}
+  \fill[KUrod] ([xshift=466.85bp,yshift=-176.4bp]current page.north west)
+    circle (15.85bp);
+  \fill[KUrod] ([xshift=507.55bp,yshift=-210.4bp]current page.north west)
+    circle (8.4bp);
+  % KØBENHAVNS UNIVERSITET
+  \node[anchor=base west, inner sep=0pt]
+    at ([xshift=55.4bp,yshift=-52.3bp]current page.north west)
+    {\textls[196]{\fontsize{11bp}{11bp}\selectfont KØBENHAVNS UNIVERSITET}};
+  % Titel og undertitel
+  \node[anchor=base west, inner sep=0pt]
+    at ([xshift=63.9bp,yshift=-274.8bp]current page.north west)
+    {\parbox[t]{460bp}{\raggedright\hyphenpenalty=10000
+      \sffamily\bfseries\fontsize{24bp}{27.6bp}\selectfont \Titel\par
+      \vspace{36bp}%
+      \mdseries\fontsize{18bp}{20.7bp}\selectfont \Undertitel\par
+      $if(forsidebillede)$\vspace{10bp}%
+      \includegraphics[width=\linewidth]{$forsidebillede$}$endif$}};    
+  % Grafik: to tynde grå streger, der løber ud over sidekanten
+  \begin{scope}
+    \clip (current page.north west) rectangle (current page.south east);
+    \draw[KUrod, line width=0.6bp]
+      ([xshift=620bp,yshift=-300bp]current page.north west) --
+      ([xshift=380bp,yshift=-930bp]current page.north west);
+    \draw[KUrod, line width=0.6bp]
+      ([xshift=640bp,yshift=-520bp]current page.north west) --
+      ([xshift=330bp,yshift=-930bp]current page.north west);
+  \end{scope}
+  % Afsender (over datoen)
+  \node[anchor=base west, inner sep=0pt]
+    at ([xshift=63.9bp,yshift=-700.2bp]current page.north west)
+    {\sffamily\fontsize{14bp}{14bp}\selectfont \Afsender};
+  % Dato
+  \node[anchor=base west, inner sep=0pt]
+    at ([xshift=63.9bp,yshift=-721.2bp]current page.north west)
+    {\sffamily\fontsize{14bp}{14bp}\selectfont \Dato};
+\end{tikzpicture}
+\clearpage
+ 
+% ---------------- Indholdsfortegnelse ----------------
+$if(toc)$
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=base west, inner sep=0pt]
+    at ([xshift=56.7bp,yshift=-107.5bp]current page.north west)
+    {\sffamily\bfseries\fontsize{24bp}{27.6bp}\selectfont \Indholdstitel};
+\end{tikzpicture}%
+\vspace*{-12.4bp}
+{\hypersetup{linkcolor=black}\makeatletter\@starttoc{toc}\makeatother}
+\clearpage
+$endif$
+ 
+% ---------------- Brødtekst ----------------
+\begingroup
+\hyphenpenalty=10000
+\rightskip=3.5bp plus 1fil\relax
+\microtypesetup{protrusion=false}
+$body$
+\par
+\endgroup
+ 
+\end{document}
